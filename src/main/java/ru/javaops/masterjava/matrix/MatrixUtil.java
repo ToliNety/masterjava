@@ -1,8 +1,10 @@
 package ru.javaops.masterjava.matrix;
 
 import java.util.Random;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * gkislin
@@ -15,6 +17,31 @@ public class MatrixUtil {
         final int matrixSize = matrixA.length;
         final int[][] matrixC = new int[matrixSize][matrixSize];
 
+        final int[][] matrixBT = new int[matrixSize][matrixSize];
+
+        for (int i = 0; i < matrixSize; i++) {
+            for (int j = 0; j < matrixSize; j++) {
+                matrixBT[j][i] = matrixB[i][j];
+            }
+        }
+
+        CountDownLatch latch = new CountDownLatch(matrixSize);
+        for (int i = 0; i < matrixSize; i++) {
+            final int n = i;
+            executor.submit(() -> {
+                for (int j = 0; j < matrixSize; j++) {
+                    int sum = 0;
+                    for (int k = 0; k < matrixSize; k++) {
+                        sum += matrixA[n][k] * matrixBT[j][k];
+                    }
+                    matrixC[n][j] = sum;
+                }
+                latch.countDown();
+            });
+        }
+
+        latch.await(10, TimeUnit.SECONDS);
+
         return matrixC;
     }
 
@@ -23,11 +50,19 @@ public class MatrixUtil {
         final int matrixSize = matrixA.length;
         final int[][] matrixC = new int[matrixSize][matrixSize];
 
+        final int[][] matrixBT = new int[matrixSize][matrixSize];
+
+        for (int i = 0; i < matrixSize; i++) {
+            for (int j = 0; j < matrixSize; j++) {
+                matrixBT[j][i] = matrixB[i][j];
+            }
+        }
+
         for (int i = 0; i < matrixSize; i++) {
             for (int j = 0; j < matrixSize; j++) {
                 int sum = 0;
                 for (int k = 0; k < matrixSize; k++) {
-                    sum += matrixA[i][k] * matrixB[k][j];
+                    sum += matrixA[i][k] * matrixBT[j][k];
                 }
                 matrixC[i][j] = sum;
             }
