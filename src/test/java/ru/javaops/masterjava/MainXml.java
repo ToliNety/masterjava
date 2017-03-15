@@ -4,12 +4,15 @@ import com.google.common.io.Resources;
 import ru.javaops.masterjava.xml.schema.ObjectFactory;
 import ru.javaops.masterjava.xml.schema.Payload;
 import ru.javaops.masterjava.xml.schema.Project;
+import ru.javaops.masterjava.xml.schema.User;
 import ru.javaops.masterjava.xml.util.JaxbParser;
 import ru.javaops.masterjava.xml.util.Schemas;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * User: gkislin
@@ -34,7 +37,20 @@ public class MainXml {
             Project project = payload.getProjects().getProject().stream()
                     .filter(pr -> pr.getName().equals(prjName))
                     .findAny()
-                    .orElseThrow(IllegalArgumentException::new);
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid project name '" + prjName + '\''));
+
+            Collection<User> users = payload.getUsers().getUser().stream()
+                    .filter(user -> !Collections.disjoint(user.getGroups(), project.getGroups().getGroup()))
+                    .collect(Collectors.toCollection(() ->
+                            new TreeSet<>(Comparator.comparing(User::getValue).thenComparing(Comparator.comparing(User::getEmail)))));
+
+            if (!users.isEmpty()) {
+                System.out.println("User for project: " + prjName);
+                users.forEach(u -> System.out.println("Name: " + u.getValue() + " / email: " + u.getEmail()));
+            } else {
+                System.out.println("There are no users for project " + prjName);
+            }
+
         } catch (IOException | JAXBException | IllegalArgumentException ex) {
             System.out.println(ex.getMessage());
         }
