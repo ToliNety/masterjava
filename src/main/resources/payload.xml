@@ -1,0 +1,54 @@
+<Payload xmlns="http://javaops.ru"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://javaops.ru payload.xsd">
+    <Users>
+        <User flag="active" city="kiv" email="gmail@gmail.com">
+            <fullName>User</fullName>
+            <groups>topjava02 masterjava02</groups>
+        </User>
+        <User flag="superuser" city="spb" email="admin@javaops.ru">
+            <fullName>Admin</fullName>
+            <groups>topjava03 topjava02 topjava01 masterjava02 masterjava01</groups>
+        </User>
+        <User flag="deleted" city="spb" email="mail@yandex.ru">
+            <fullName>Deleted</fullName>
+            <groups>topjava01</groups>
+        </User>
+    </Users>
+    <Cities>
+        <City id="spb">Санкт-Петербург</City>
+        <City id="kiv">Киев</City>
+        <City id="mnsk">Минск</City>
+    </Cities>
+    <Projects>
+        <Project projid="topjava">
+            <name>TopJava name</name>
+            <description>TopJava description</description>
+        </Project>
+        <Project projid="masterjava">
+            <name>MasterJava name</name>
+            <description>MasterJava description</description>
+        </Project>
+        <Project projid="newjava">
+            <name>NewJava name</name>
+            <description>NewJava description</description>
+        </Project>
+    </Projects>
+    <Groups>
+        <Group status="REGISTERING" project="spb" groupID="topjava03">
+            <name>TopJava 03</name>
+        </Group>
+        <Group status="CURRENT" project="topjava" groupID="topjava02">
+            <name>TopJava 02</name>
+        </Group>
+        <Group status="FINISHED" project="topjava" groupID="topjava01">
+            <name>TopJava 01</name>
+        </Group>
+        <Group status="REGISTERING" project="masterjava" groupID="masterjava02">
+            <name>MasterJava 02</name>
+        </Group>
+        <Group status="CURRENT" project="masterjava" groupID="masterjava01">
+            <name>MasterJava 01</name>
+        </Group>
+    </Groups>
+</Payload>

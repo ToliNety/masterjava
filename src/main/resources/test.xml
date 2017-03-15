@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<foo xmlns="test"   
+    xsi:schemaLocation="test test.xsd"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <bar id="1" />
+    <bar id="2" />
+    <batz idref="1" /> <!-- this should succeed because <bar id="1"> exists -->
+    <batz idref="3" /> <!-- this should FAIL -->
+</foo>

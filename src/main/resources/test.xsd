@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="test" 
+    xmlns:t="test"
+    xmlns="test" elementFormDefault="qualified"> 
+    <xs:element name="foo">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="bar" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="id" use="required" type="xs:string" />
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="batz" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="idref" use="required" type="xs:string" />
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+        
+        <xs:key name="ID">
+            <xs:selector xpath="t:bar" />
+            <xs:field xpath="@id" />
+        </xs:key>
+        
+        <xs:keyref name="IDREF" refer="ID">
+            <xs:selector xpath="t:batz" />
+            <xs:field xpath="@idref" />
+        </xs:keyref>
+        
+    </xs:element>
+</xs:schema>
