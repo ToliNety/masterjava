@@ -1,0 +1,6 @@
+<Project projID="topjava" xmlns="http://javaops.ru"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://javaops.ru payload.xsd">
+    <name>TopJava Self instance</name>
+    <description>TopJava Self instance</description>
+</Project>

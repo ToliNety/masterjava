@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="http://javaops.ru"
+           xmlns:t="http://javaops.ru"
+           targetNamespace="http://javaops.ru"
+           elementFormDefault="qualified" attributeFormDefault="unqualified">
+    <xs:complexType name="DeptType">
+        <xs:sequence>
+            <xs:element name="Deptno" type="xs:int"/>
+            <xs:element name="Dname" type="xs:string"/>
+            <xs:element name="Loc" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="Organization">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="dept" type="DeptType"
+                            maxOccurs="unbounded"/>
+                <xs:element name="Employee"
+                            type="EmployeeType" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+        <xs:key name="PK_Dept_Deptno">
+            <xs:selector xpath="dept/Deptno"/>
+            <xs:field xpath="."/>
+        </xs:key>
+        <xs:keyref name="FK_deptEmployee"
+                   refer="PK_Dept_Deptno">
+            <xs:selector xpath="Employee/Deptno"/>
+            <xs:field xpath="."/>
+        </xs:keyref>
+    </xs:element>
+    <xs:complexType name="EmployeeType">
+        <xs:sequence>
+            <xs:element name="Empno" type="xs:int"/>
+            <xs:element name="Ename" type="xs:string"/>
+            <xs:element name="Sal" type="xs:float"/>
+            <xs:element name="Deptno" type="xs:int"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
