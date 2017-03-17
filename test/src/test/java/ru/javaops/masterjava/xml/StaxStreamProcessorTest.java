@@ -1,7 +1,8 @@
-package ru.javaops.masterjava.xml.util;
+package ru.javaops.masterjava.xml;
 
 import com.google.common.io.Resources;
 import org.junit.Test;
+import ru.javaops.masterjava.xml.util.StaxStreamProcessor;
 
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.events.XMLEvent;

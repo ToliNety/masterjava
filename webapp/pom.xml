@@ -11,9 +11,10 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>export</artifactId>
+    <artifactId>webapp</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>WebAPP</name>
     <packaging>war</packaging>
-    <name>Export</name>
 
     <build>
         <plugins>
@@ -23,8 +24,6 @@
                 <version>3.0.0</version>
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
-                    <attachClasses>true</attachClasses>
-                    <classesClassifier>classes</classesClassifier>
                 </configuration>
             </plugin>
         </plugins>
@@ -33,8 +32,9 @@
     <dependencies>
         <dependency>
             <groupId>ru.javaops</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>mail-api</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
+    
 </project>
