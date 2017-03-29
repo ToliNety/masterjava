@@ -1,6 +1,8 @@
 package ru.javaops.masterjava.export;
 
 import org.thymeleaf.context.WebContext;
+import ru.javaops.masterjava.persist.DBIProvider;
+import ru.javaops.masterjava.persist.dao.UserDao;
 import ru.javaops.masterjava.persist.model.User;
 
 import javax.servlet.ServletException;
@@ -22,9 +24,13 @@ public class UploadServlet extends HttpServlet {
 
     private final UserExport userExport = new UserExport();
 
+    private final UserDao userDao = DBIProvider.getDao(UserDao.class);
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         final WebContext webContext = new WebContext(req, resp, req.getServletContext(), req.getLocale());
+        List<User> users = userDao.getWithLimit(20);
+        webContext.setVariable("users", users);
         engine.process("export", webContext, resp.getWriter());
     }
 
@@ -37,6 +43,7 @@ public class UploadServlet extends HttpServlet {
             Part filePart = req.getPart("fileToUpload");
             try (InputStream is = filePart.getInputStream()) {
                 List<User> users = userExport.process(is);
+                userDao.insertChunkedBatch(users.iterator());
                 webContext.setVariable("users", users);
                 engine.process("result", webContext, resp.getWriter());
             }

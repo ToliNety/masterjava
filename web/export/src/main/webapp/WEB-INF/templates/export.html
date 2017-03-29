@@ -1,4 +1,4 @@
-<head>
+<html xmlns:th="http://www.thymeleaf.org">
     <meta charset="UTF-8">
     <title>Export XML</title>
 </head>
@@ -12,5 +12,22 @@
         <input type="submit" value="Upload" name="submit">
     </p>
 </form>
+<h3>Users (first 20)</h3>
+<table border="1" cellpadding="8" cellspacing="0">
+    <thead>
+    <tr>
+        <th>Full Name</th>
+        <th>Email</th>
+        <th>Flag</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.fullName}"></td>
+        <td th:utext="${user.email}"></td>
+        <td th:text="${user.flag}"></td>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>
