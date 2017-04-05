@@ -1,6 +1,5 @@
 package ru.javaops.masterjava.export;
 
-import one.util.streamex.IntStreamEx;
 import ru.javaops.masterjava.persist.DBIProvider;
 import ru.javaops.masterjava.persist.dao.UserDao;
 import ru.javaops.masterjava.persist.model.User;
@@ -32,7 +31,7 @@ public class UserExport {
      * @return users, already present in DB
      * @throws XMLStreamException
      */
-    public List<String> process(final InputStream is, int chunkSize) throws XMLStreamException {
+    public List<BatchResult> process(final InputStream is, int chunkSize) throws XMLStreamException {
         final StaxStreamProcessor processor = new StaxStreamProcessor(is);
         final ExecutorService executorService = Executors.newFixedThreadPool(THREADS);
 
@@ -60,30 +59,28 @@ public class UserExport {
 
         return futureBatchResults.stream()
                 .map((fbr) -> {
-                    StringBuilder sb = new StringBuilder();
                     try {
-                        sb.append(fbr.get().emailRange);
-                        List<User> notAddedUsers = fbr.get().notAddedUsers;
-                        if (!notAddedUsers.isEmpty()) {
-                            sb.append(
-                                    notAddedUsers.stream()
-                                    .map(User::getFullName)
-                                    .collect(Collectors.joining(", ")));
-                        }
+                        return fbr.get();
                     } catch (InterruptedException | ExecutionException e) {
-                        e.printStackTrace();
+                        return new BatchResult(e.getMessage());
                     }
-                    return sb.toString();
-                }).collect(Collectors.toList());
+                })
+                .collect(Collectors.toList());
     }
 
-    private class BatchResult {
-        List<User> notAddedUsers;
-        String emailRange;
+    public class BatchResult {
+        public List<User> users;
+        public String emailRange;
+        public String message;
 
         public BatchResult(List<User> notAddedUsers, String emailRange) {
-            this.notAddedUsers = notAddedUsers;
+            this.users = notAddedUsers;
             this.emailRange = emailRange;
+            this.message = String.format("Already present user. Email range: %s. Users: ", emailRange);
+        }
+
+        public BatchResult(String message) {
+            this.message = message;
         }
     }
 

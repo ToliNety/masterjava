@@ -44,10 +44,10 @@ public class UploadServlet extends HttpServlet {
             } else {
                 Part filePart = req.getPart("fileToUpload");
                 try (InputStream is = filePart.getInputStream()) {
-                    List<String> batchResults = userExport.process(is, chunkSize);
+                    List<UserExport.BatchResult> results = userExport.process(is, chunkSize);
                     final WebContext webContext =
                             new WebContext(req, resp, req.getServletContext(), req.getLocale(),
-                                    ImmutableMap.of("emails", batchResults));
+                                    ImmutableMap.of("failed", results));
                     engine.process("result", webContext, resp.getWriter());
                     return;
                 }

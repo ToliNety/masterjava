@@ -6,10 +6,13 @@
 <body>
 <h4><a href="">Export XML</a></h4>
 <h3>Already present users</h3>
-<!--/*@thymesVar id="emails" type="java.util.List<java.lang.String>"*/-->
-<p th:each="res : ${emails}">
-    <p th:text="${res}">data</p>
+<!--/*@thymesVar id="failed" type="java.util.List<ru.javaops.masterjava.export.UserExport$BatchResult>"*/-->
+<p th:each="fail: ${failed}" th:text="${fail.message}">
+<ul>
+    <li th:each="user: ${fail.users}" th:text="${user}"></li>
+</ul>
 </p>
+
 
 </body>
 </html>
