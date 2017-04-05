@@ -6,21 +6,10 @@
 <body>
 <h4><a href="">Export XML</a></h4>
 <h3>Already present users</h3>
-<table border="1" cellpadding="8" cellspacing="0">
-    <thead>
-    <tr>
-        <th>Full Name</th>
-        <th>Email</th>
-        <th>Flag</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="user : ${users}">
-        <td th:text="${user.fullName}"></td>
-        <td th:utext="${user.email}"></td>
-        <td th:text="${user.flag}"></td>
-    </tr>
-    </tbody>
-</table>
+<!--/*@thymesVar id="emails" type="java.util.List<java.lang.String>"*/-->
+<p th:each="res : ${emails}">
+    <p th:text="${res}">data</p>
+</p>
+
 </body>
 </html>

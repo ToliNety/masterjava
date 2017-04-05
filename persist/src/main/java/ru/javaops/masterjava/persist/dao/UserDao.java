@@ -1,6 +1,7 @@
 package ru.javaops.masterjava.persist.dao;
 
 import com.bertoncelj.jdbi.entitymapper.EntityMapperFactory;
+import one.util.streamex.IntStreamEx;
 import org.skife.jdbi.v2.sqlobject.*;
 import org.skife.jdbi.v2.sqlobject.customizers.BatchChunkSize;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapperFactory;
@@ -47,4 +48,12 @@ public abstract class UserDao implements AbstractDao {
             "ON CONFLICT DO NOTHING")
 //            "ON CONFLICT (email) DO UPDATE SET full_name=:fullName, flag=CAST(:flag AS USER_FLAG)")
     public abstract int[] insertBatch(@BindBean List<User> users, @BatchChunkSize int chunkSize);
+
+    public List<User> insertBatchAndGetNotAddedUsers(List<User> users, int chunkSize) {
+        int[] result = insertBatch(users, chunkSize);
+        return IntStreamEx.range(0, users.size())
+                .filter(i -> result[i] == 0)
+                .mapToObj(users::get)
+                .toList();
+    }
 }
