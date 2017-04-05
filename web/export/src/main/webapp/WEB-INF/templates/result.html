@@ -7,10 +7,7 @@
 <h4><a href="">Export XML</a></h4>
 <h3>Already present users</h3>
 <!--/*@thymesVar id="failed" type="java.util.List<ru.javaops.masterjava.export.UserExport$BatchResult>"*/-->
-<p th:each="fail: ${failed}" th:text="${fail.message}">
-<ul>
-    <li th:each="user: ${fail.users}" th:text="${user}"></li>
-</ul>
+<p th:each="fail: ${failed}" th:text="${fail}">
 </p>
 
 

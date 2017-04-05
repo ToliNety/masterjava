@@ -80,7 +80,15 @@ public class UserExport {
         }
 
         public BatchResult(String message) {
+            users = new ArrayList<>();
             this.message = message;
+        }
+
+        @Override
+        public String toString() {
+            return message + users.stream()
+                    .map(User::getFullName)
+                    .collect(Collectors.joining(", "));
         }
     }
 
@@ -98,7 +106,11 @@ public class UserExport {
             }
             emailRange.append(" : ");
 
-            return new BatchResult(notAddedUsers, emailRange.toString());
+            if (notAddedUsers.isEmpty()) {
+                return new BatchResult("All users added");
+            }else {
+                return new BatchResult(notAddedUsers, emailRange.toString());
+            }
         }));
     }
 }
