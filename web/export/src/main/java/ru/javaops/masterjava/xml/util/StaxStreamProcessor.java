@@ -1,5 +1,9 @@
 package ru.javaops.masterjava.xml.util;
 
+import lombok.NonNull;
+import ru.javaops.masterjava.xml.schema.GroupType;
+import ru.javaops.masterjava.xml.schema.Project;
+
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
@@ -56,6 +60,28 @@ public class StaxStreamProcessor implements AutoCloseable {
 
     public String getText() throws XMLStreamException {
         return reader.getElementText();
+    }
+
+    public void nextStartElement() throws XMLStreamException {
+        int descEvent;
+        do {
+            descEvent = reader.next();
+        } while (descEvent != XMLEvent.START_ELEMENT);
+    }
+
+    public boolean nextInnerElement(@NonNull String innerElement, @NonNull String outerElement) throws XMLStreamException {
+        while (reader.hasNext()) {
+            int event = reader.next();
+            if (event == XMLEvent.END_ELEMENT && outerElement.equals(reader.getLocalName())) {
+                break;
+            }
+
+            if (event == XMLEvent.START_ELEMENT && innerElement.equals(reader.getLocalName())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override

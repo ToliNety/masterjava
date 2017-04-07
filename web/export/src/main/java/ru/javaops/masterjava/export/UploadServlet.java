@@ -42,6 +42,11 @@ public class UploadServlet extends HttpServlet {
             } else {
                 Part filePart = req.getPart("fileToUpload");
                 try (InputStream is = filePart.getInputStream()) {
+                    ImportUtils importProjects = new ImportUtils(is);
+                    importProjects.process();
+                }
+
+                try (InputStream is = filePart.getInputStream()) {
                     List<UserExport.FailedEmail> failed = userExport.process(is, chunkSize);
                     log.info("Failed users: " + failed);
                     final WebContext webContext =
