@@ -3,8 +3,8 @@ package ru.javaops.masterjava.xml.util;
 import com.google.common.io.Resources;
 import org.junit.Test;
 import ru.javaops.masterjava.export.ImportUtils;
+import ru.javaops.masterjava.persist.model.Project;
 import ru.javaops.masterjava.xml.schema.CityType;
-import ru.javaops.masterjava.xml.schema.Project;
 
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.events.XMLEvent;
@@ -48,16 +48,17 @@ public class StaxStreamProcessorTest {
 
         try (InputStream is =
                      Resources.getResource("payload.xml").openStream()) {
-            ImportUtils importXML = new ImportUtils(is);
+            ImportUtils importXML = new ImportUtils(null, null);
+            StaxStreamProcessor processor = new StaxStreamProcessor(is);
 
-            List<Project> projects = importXML.getProjects();
-            List<CityType> cities = importXML.getCities();
+            List<Project> projects = importXML.getProjects(processor);
+            List<CityType> cities = importXML.getCities(processor);
 
             System.out.println("///Projects");
             projects.forEach(project -> {
                 System.out.println(project.getName() + " : " + project.getDescription());
                 System.out.println("Groups:");
-                project.getGroup().forEach(group -> System.out.println("   " + group.getName() + " : " + group.getType().value()));
+                project.getGroups().forEach(group -> System.out.println("   " + group.getName() + " : " + group.getGroupType()));
             });
             System.out.println("///Cities");
             cities.forEach(c-> System.out.println(c.getValue()));
