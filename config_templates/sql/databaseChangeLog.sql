@@ -33,3 +33,18 @@ CREATE TABLE user_group (
   group_id INTEGER NOT NULL REFERENCES groups (id),
   CONSTRAINT users_group_idx UNIQUE (user_id, group_id)
 );
+
+--changeset tolinety:3
+CREATE TABLE email_results (
+  id          INTEGER PRIMARY KEY DEFAULT nextval('common_seq'),
+  subject     TEXT NOT NULL,
+  body        TEXT NOT NULL,
+  success     INTEGER NOT NULL DEFAULT 0,
+  failedCause TEXT
+);
+
+CREATE TABLE failed_emails (
+  id          INTEGER PRIMARY KEY DEFAULT nextval('common_seq'),
+  email       TEXT NOT NULL,
+
+);

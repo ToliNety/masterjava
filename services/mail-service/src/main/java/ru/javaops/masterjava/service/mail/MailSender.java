@@ -10,7 +10,11 @@ import java.util.List;
  */
 @Slf4j
 public class MailSender {
-    static void sendMail(List<Addressee> to, List<Addressee> cc, String subject, String body) {
-        log.info("Send mail to \'" + to + "\' cc \'" + cc + "\' subject \'" + subject + (log.isDebugEnabled()?"\nbody=" + body:""));
+    private static final MailServiceExecutor MAIL_EXECUTOR = new MailServiceExecutor();
+
+    static String sendMail(List<Addressee> to, List<Addressee> cc, String subject, String body) {
+        MailServiceExecutor.GroupResult groupResult = MAIL_EXECUTOR.sendToList(to, subject, body);
+        log.info(groupResult.toString());
+        return groupResult.toString();
     }
 }

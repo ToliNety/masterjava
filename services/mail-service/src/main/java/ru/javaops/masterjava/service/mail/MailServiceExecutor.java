@@ -1,25 +1,34 @@
 package ru.javaops.masterjava.service.mail;
 
+import com.typesafe.config.Config;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.mail.DefaultAuthenticator;
+import org.apache.commons.mail.Email;
+import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.SimpleEmail;
+import ru.javaops.masterjava.persist.config.Configs;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class MailServiceExecutor {
     private static final String OK = "OK";
 
     private static final String INTERRUPTED_BY_FAULTS_NUMBER = "+++ Interrupted by faults number";
     private static final String INTERRUPTED_BY_TIMEOUT = "+++ Interrupted by timeout";
     private static final String INTERRUPTED_EXCEPTION = "+++ InterruptedException";
+    private static final Config MAIL_SMTP_CONF = Configs.getConfig("mail.conf", "smtp");
 
     private final ExecutorService mailExecutor = Executors.newFixedThreadPool(8);
 
-    public GroupResult sendToList(final String template, final Set<String> emails) throws Exception {
+    public GroupResult sendToList(final List<Addressee> to, final String subject, final String body) {
         final CompletionService<MailResult> completionService = new ExecutorCompletionService<>(mailExecutor);
 
-        List<Future<MailResult>> futures = emails.stream()
-                .map(email -> completionService.submit(() -> sendToUser(template, email)))
+        List<Future<MailResult>> futures = to.stream()
+                .map(email -> completionService.submit(() -> sendToUser(email, subject, body)))
                 .collect(Collectors.toList());
 
         return new Callable<GroupResult>() {
@@ -82,15 +91,37 @@ public class MailServiceExecutor {
         }.call();
     }
 
-    // dummy realization
-    public MailResult sendToUser(String template, String email) throws Exception {
+    public MailResult sendToUser(Addressee to, String subject, String body) throws Exception {
         try {
-            Thread.sleep(500);  //delay
-        } catch (InterruptedException e) {
-            // log cancel;
-            return null;
+            Email email = createEMail(to, subject, body);
+            email.send();
+            log.info("Send mail to \'" + to + "\' subject \'" + subject + (log.isDebugEnabled() ? "\nbody=" + getBody(body, to) : ""));
+        } catch (EmailException e) {
+            log.debug(e.getMessage());
+            return MailResult.error(to.getEmail(), e.getMessage());
         }
-        return Math.random() < 0.7 ? MailResult.ok(email) : MailResult.error(email, "Error");
+        return MailResult.ok(to.getEmail());
+    }
+
+    private Email createEMail(Addressee to, String subject, String body) throws EmailException {
+        Email email = new SimpleEmail();
+        email.setAuthenticator(new DefaultAuthenticator(
+                MAIL_SMTP_CONF.getString("username"),
+                MAIL_SMTP_CONF.getString("password")));
+        email.setHostName(MAIL_SMTP_CONF.getString("host"));
+        email.setSmtpPort(MAIL_SMTP_CONF.getInt("port"));
+        email.setSSLOnConnect(MAIL_SMTP_CONF.getBoolean("useSSL"));
+        email.setFrom(MAIL_SMTP_CONF.getString("fromEmail"));
+        email.setSubject(subject);
+        email.setMsg(getBody(body, to));
+        email.addTo(to.getEmail());
+        return email;
+    }
+
+    private String getBody(String body, Addressee to) {
+        return String.format("Hello %s!\n\n", to.getName()) +
+                body +
+                String.format("\n\n---\nBest regards,\n%s", MAIL_SMTP_CONF.getString("fromName"));
     }
 
     public static class MailResult {
@@ -101,8 +132,8 @@ public class MailServiceExecutor {
             return new MailResult(email, OK);
         }
 
-        private static MailResult error(String email, String error) {
-            return new MailResult(email, error);
+        private static MailResult error(String email, String errorMsg) {
+            return new MailResult(email, errorMsg);
         }
 
         public boolean isOk() {

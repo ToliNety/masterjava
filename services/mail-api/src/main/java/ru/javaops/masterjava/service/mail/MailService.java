@@ -13,7 +13,7 @@ import java.util.List;
 public interface MailService {
 
     @WebMethod
-    void sendMail(
+    String sendMail(
             @WebParam(name = "to") List<Addressee> to,
             @WebParam(name = "cc") List<Addressee> cc,
             @WebParam(name = "subject") String subject,

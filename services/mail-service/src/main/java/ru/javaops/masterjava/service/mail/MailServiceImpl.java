@@ -9,7 +9,7 @@ import java.util.List;
  */
 @WebService(endpointInterface = "ru.javaops.masterjava.service.mail.MailService")
 public class MailServiceImpl implements MailService {
-    public void sendMail(List<Addressee> to, List<Addressee> cc, String subject, String body) {
-        MailSender.sendMail(to, cc, subject, body);
+    public String sendMail(List<Addressee> to, List<Addressee> cc, String subject, String body) {
+        return MailSender.sendMail(to, cc, subject, body);
     }
 }
