@@ -1,6 +1,8 @@
 package ru.javaops.masterjava.service.mail;
 
 import com.typesafe.config.Config;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.Email;
@@ -151,16 +153,12 @@ public class MailServiceExecutor {
         }
     }
 
+    @Getter
+    @AllArgsConstructor
     public static class GroupResult {
         private final int success; // number of successfully sent email
         private final List<MailResult> failed; // failed emails with causes
         private final String failedCause;  // global fail cause
-
-        public GroupResult(int success, List<MailResult> failed, String failedCause) {
-            this.success = success;
-            this.failed = failed;
-            this.failedCause = failedCause;
-        }
 
         @Override
         public String toString() {
