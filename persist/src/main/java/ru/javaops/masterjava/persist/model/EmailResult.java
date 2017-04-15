@@ -3,6 +3,9 @@ package ru.javaops.masterjava.persist.model;
 import com.bertoncelj.jdbi.entitymapper.Column;
 import lombok.*;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Created by tolikswx on 14.04.2017.
  */
@@ -24,8 +27,14 @@ public class EmailResult extends BaseEntity {
     @Column("result_error")
     private String resultError;
 
-    public EmailResult(Integer id, String subject, String body, int success, String resultError) {
-        this(subject, body, success, resultError);
+    private List<FailedEmail> failedEmails;
+
+    public EmailResult(Integer id, String subject, String body, int success, String resultError, List<FailedEmail> failedEmails) {
+        this(subject, body, success, resultError, failedEmails);
         this.id = id;
+    }
+
+    public EmailResult(String subject, String body, int success, String resultError) {
+        this(subject, body, success, resultError, Collections.emptyList());
     }
 }

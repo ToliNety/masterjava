@@ -13,6 +13,8 @@ public class EmailResultTestData {
     public static EmailResult RESULT_1;
     public static List<EmailResult> RESULTS;
 
+    public static int RESULT_ID;
+
     public static void init() {
         RESULT_1 = new EmailResult("test mail",
                 "MasterJava test mail. Don't Answer on this email", 3, null);
@@ -23,5 +25,6 @@ public class EmailResultTestData {
         EmailResultDao dao = DBIProvider.getDao(EmailResultDao.class);
         dao.clean();
         dao.insert(RESULT_1);
+        RESULT_ID = RESULT_1.getId();
     }
 }

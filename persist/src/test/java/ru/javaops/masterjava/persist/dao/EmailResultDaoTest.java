@@ -30,7 +30,7 @@ public class EmailResultDaoTest extends AbstractDaoTest<EmailResultDao> {
     }
 
     @Test
-    public void getWithLimit() {
+    public void getWithLimit() throws Exception{
         List<EmailResult> resultList = dao.getWithLimit(5);
         Assert.assertEquals(resultList, RESULTS);
     }

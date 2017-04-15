@@ -126,6 +126,7 @@ public class MailServiceExecutor {
                 String.format("\n\n---\nBest regards,\n%s", MAIL_SMTP_CONF.getString("fromName"));
     }
 
+    @Getter
     public static class MailResult {
         private final String email;
         private final String result;
@@ -154,7 +155,6 @@ public class MailServiceExecutor {
     }
 
     @Getter
-    @AllArgsConstructor
     public static class GroupResult {
         private final int success; // number of successfully sent email
         private final List<MailResult> failed; // failed emails with causes
@@ -165,6 +165,12 @@ public class MailServiceExecutor {
             return "Success: " + success + '\n' +
                     "Failed: " + failed.toString() + '\n' +
                     (failedCause == null ? "" : "Failed cause" + failedCause);
+        }
+
+        private GroupResult(int success, List<MailResult> failed, String failedCause) {
+            this.success = success;
+            this.failed = failed;
+            this.failedCause = failedCause;
         }
     }
 }
