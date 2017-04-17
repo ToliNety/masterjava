@@ -1,4 +1,4 @@
-package ru.javaops.masterjava.persist.config;
+package ru.javaops.masterjava.config;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
