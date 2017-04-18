@@ -31,7 +31,7 @@ public class CityImporter {
                 newCities.add(new City(null, ref, processor.getText()));
             }
         }
-        log.info("Insert batch " + newCities);
+        log.info("Insert cities batch " + newCities);
         cityDao.insertBatch(newCities);
         return cityDao.getAsMap();
     }
