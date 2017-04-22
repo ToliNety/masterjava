@@ -1,4 +1,4 @@
-package ru.javaops.masterjava.service.mail;
+package ru.javaops.masterjava.service.mailAPI;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;

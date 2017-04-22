@@ -2,6 +2,9 @@ package ru.javaops.masterjava.service.mail;
 
 import lombok.extern.slf4j.Slf4j;
 import one.util.streamex.StreamEx;
+import ru.javaops.masterjava.service.mailAPI.Addressee;
+import ru.javaops.masterjava.service.mailAPI.GroupResult;
+import ru.javaops.masterjava.service.mailAPI.MailResult;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,9 +1,13 @@
 package ru.javaops.masterjava.service.mail;
 
+import ru.javaops.masterjava.service.mailAPI.Addressee;
+import ru.javaops.masterjava.service.mailAPI.GroupResult;
+import ru.javaops.masterjava.service.mailAPI.MailService;
+
 import javax.jws.WebService;
 import java.util.Set;
 
-@WebService(endpointInterface = "ru.javaops.masterjava.service.mail.MailService", targetNamespace = "http://mail.javaops.ru/"
+@WebService(endpointInterface = "ru.javaops.masterjava.service.mailAPI.MailService", targetNamespace = "http://mail.javaops.ru/"
 //          , wsdlLocation = "WEB-INF/wsdl/mailService.wsdl"
 )
 public class MailServiceImpl implements MailService {

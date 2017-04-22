@@ -3,7 +3,7 @@ package ru.javaops.masterjava.service.mail.persist;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import ru.javaops.masterjava.persist.DBIProvider;
-import ru.javaops.masterjava.service.mail.Addressee;
+import ru.javaops.masterjava.service.mailAPI.Addressee;
 
 import java.time.Duration;
 import java.time.Instant;

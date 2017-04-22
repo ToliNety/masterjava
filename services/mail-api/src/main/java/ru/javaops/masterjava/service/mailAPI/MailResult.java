@@ -1,13 +1,17 @@
-package ru.javaops.masterjava.service.mail;
+package ru.javaops.masterjava.service.mailAPI;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class MailResult {
     public static final String OK = "OK";
 
-    private final String email;
-    private final String result;
+    private String email;
+    private String result;
 
     public boolean isOk() {
         return OK.equals(result);

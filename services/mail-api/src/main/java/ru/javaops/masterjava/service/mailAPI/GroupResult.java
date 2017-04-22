@@ -1,10 +1,12 @@
-package ru.javaops.masterjava.service.mail;
+package ru.javaops.masterjava.service.mailAPI;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class GroupResult {

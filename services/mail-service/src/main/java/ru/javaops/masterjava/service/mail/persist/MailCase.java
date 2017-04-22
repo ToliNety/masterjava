@@ -4,7 +4,7 @@ import com.bertoncelj.jdbi.entitymapper.Column;
 import com.google.common.base.Joiner;
 import lombok.*;
 import ru.javaops.masterjava.persist.model.BaseEntity;
-import ru.javaops.masterjava.service.mail.Addressee;
+import ru.javaops.masterjava.service.mailAPI.Addressee;
 
 import java.util.Date;
 import java.util.Set;

@@ -1,4 +1,4 @@
-package ru.javaops.masterjava.service.mail;
+package ru.javaops.masterjava.service.mailAPI;
 
 import com.google.common.io.Resources;
 import lombok.extern.slf4j.Slf4j;

@@ -8,6 +8,8 @@ import org.apache.commons.mail.EmailException;
 import ru.javaops.masterjava.persist.DBIProvider;
 import ru.javaops.masterjava.service.mail.persist.MailCase;
 import ru.javaops.masterjava.service.mail.persist.MailCaseDao;
+import ru.javaops.masterjava.service.mailAPI.Addressee;
+import ru.javaops.masterjava.service.mailAPI.MailResult;
 
 import java.util.Set;
 
