@@ -25,6 +25,7 @@ public interface MailService {
     GroupResult sendBulk(
             @WebParam(name = "to") Set<Addressee> to,
             @WebParam(name = "subject") String subject,
-            @WebParam(name = "body") String body) throws WebStateException;
-
+            @WebParam(name = "body") String body,
+            @WebParam(name = "fileName") String fileName,
+            @WebParam(name = "file") byte[] bytes) throws WebStateException;
 }

@@ -26,7 +26,7 @@ public class MailServiceClient {
             String status = mailService.sendToGroup(addressees, ImmutableSet.of(), "Bulk email subject", "Bulk email body");
             System.out.println(status);
 
-            GroupResult groupResult = mailService.sendBulk(addressees, "Individual mail subject", "Individual mail body");
+            GroupResult groupResult = mailService.sendBulk(addressees, "Individual mail subject", "Individual mail body", "", new byte[0]);
             System.out.println(groupResult);
         } catch (WebStateException e) {
             System.out.println(e);

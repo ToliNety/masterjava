@@ -43,6 +43,9 @@
         <textarea id="body" placeholder="mail body" cols=75 rows=5></textarea><br/>
     </p>
     <p>
+        <input id="file" placeholder="attachment" type="file">
+    </p>
+    <p>
         <button type="button" onclick="send()">Send</button>
     </p>
     <div id="result"></div>
@@ -53,10 +56,20 @@
         var users = $("input:checkbox:checked").map(function () {
             return this.value;
         }).get();
+        var file = $('#file')[0].files[0];
+        var formData = new FormData();
+        formData.append('file', file);
+        if (file != null)
+            formData.append('filename', file.name);
+        formData.append('users', users);
+        formData.append('subject', $("#subject").val());
+        formData.append('body', $("#body").val());
         $.ajax({
             type: "POST",
             url: "send",
-            data: "users=" + users + "&subject=" + $("#subject").val() + "&body=" + $("#body").val(),
+            data: formData,
+            processData: false,  // tell jQuery not to process the data
+            contentType: false,  // tell jQuery not to set contentType
             success: function (result) {
                 $('#result').html(result);
             }

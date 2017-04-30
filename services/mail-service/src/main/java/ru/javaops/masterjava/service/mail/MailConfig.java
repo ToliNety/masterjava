@@ -1,13 +1,12 @@
 package ru.javaops.masterjava.service.mail;
 
 import com.typesafe.config.Config;
-import org.apache.commons.mail.DefaultAuthenticator;
-import org.apache.commons.mail.Email;
-import org.apache.commons.mail.EmailException;
-import org.apache.commons.mail.HtmlEmail;
+import org.apache.commons.mail.*;
 import ru.javaops.masterjava.config.Configs;
 
 import javax.mail.Authenticator;
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.nio.charset.StandardCharsets;
 
 public class MailConfig {

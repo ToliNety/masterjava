@@ -9,6 +9,7 @@ import ru.javaops.web.WebStateException;
 import ru.javaops.web.WsClient;
 
 import javax.xml.namespace.QName;
+import javax.xml.ws.soap.MTOMFeature;
 import java.util.Set;
 
 @Slf4j
@@ -37,11 +38,11 @@ public class MailWSClient {
         return status;
     }
 
-    public static GroupResult sendBulk(final Set<Addressee> to, final String subject, final String body) throws WebStateException {
+    public static GroupResult sendBulk(final Set<Addressee> to, final String subject, final String body, String fileName, final byte[] bytes) throws WebStateException {
         log.info("Send mail to '" + to + "' subject '" + subject + (log.isDebugEnabled() ? "\nbody=" + body : ""));
         GroupResult result;
         try {
-            result = WS_CLIENT.getPort().sendBulk(to, subject, body);
+            result = WS_CLIENT.getPort().sendBulk(to, subject, body, fileName, bytes);
         } catch (WebStateException e) {
             log.error("sendBulk failed", e);
             throw WsClient.getWebStateException(e);
