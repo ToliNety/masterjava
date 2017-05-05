@@ -4,6 +4,7 @@ import ru.javaops.web.AuthUtil;
 import ru.javaops.web.WebStateException;
 
 import javax.annotation.Resource;
+import javax.jws.HandlerChain;
 import javax.jws.WebService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,6 +19,7 @@ import java.util.Set;
 )
 //@StreamingAttachment(parseEagerly=true, memoryThreshold=40000L)
 //@MTOM
+@HandlerChain(file = "mailWsHandlers.xml")
 public class MailServiceImpl implements MailService {
 
     @Resource
@@ -28,8 +30,8 @@ public class MailServiceImpl implements MailService {
         MessageContext mCtx = wsContext.getMessageContext();
         Map<String, List<String>> headers = (Map<String, List<String>>) mCtx.get(MessageContext.HTTP_REQUEST_HEADERS);
 
-        HttpServletRequest request = (HttpServletRequest) mCtx.get(MessageContext.SERVLET_REQUEST);
-        HttpServletResponse response = (HttpServletResponse) mCtx.get(MessageContext.SERVLET_RESPONSE);
+        //HttpServletRequest request = (HttpServletRequest) mCtx.get(MessageContext.SERVLET_REQUEST);
+        //HttpServletResponse response = (HttpServletResponse) mCtx.get(MessageContext.SERVLET_RESPONSE);
 
         int code = AuthUtil.checkBasicAuth(headers, MailWSClient.AUTH_HEADER);
         if (code != 0) {
