@@ -1,17 +1,11 @@
 package ru.javaops.masterjava.service.mail;
 
-import ru.javaops.web.AuthUtil;
+import ru.javaops.masterjava.ExceptionType;
 import ru.javaops.web.WebStateException;
 
-import javax.annotation.Resource;
 import javax.jws.HandlerChain;
 import javax.jws.WebService;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.xml.ws.WebServiceContext;
-import javax.xml.ws.handler.MessageContext;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 @WebService(endpointInterface = "ru.javaops.masterjava.service.mail.MailService", targetNamespace = "http://mail.javaops.ru/"
@@ -22,27 +16,26 @@ import java.util.Set;
 @HandlerChain(file = "mailWsHandlers.xml")
 public class MailServiceImpl implements MailService {
 
-    @Resource
-    private WebServiceContext wsContext;
-
     @Override
     public String sendToGroup(Set<Addressee> to, Set<Addressee> cc, String subject, String body, List<Attach> attaches) throws WebStateException {
-        MessageContext mCtx = wsContext.getMessageContext();
-        Map<String, List<String>> headers = (Map<String, List<String>>) mCtx.get(MessageContext.HTTP_REQUEST_HEADERS);
-
-        //HttpServletRequest request = (HttpServletRequest) mCtx.get(MessageContext.SERVLET_REQUEST);
-        //HttpServletResponse response = (HttpServletResponse) mCtx.get(MessageContext.SERVLET_RESPONSE);
-
-        int code = AuthUtil.checkBasicAuth(headers, MailWSClient.AUTH_HEADER);
-        if (code != 0) {
-            mCtx.put(MessageContext.HTTP_RESPONSE_CODE, code);
-            throw new SecurityException();
+        String result = MailSender.sendToGroup(to, cc, subject, body, attaches);
+        if (!result.equals(MailResult.OK)) {
+            throw new WebStateException(result, ExceptionType.EMAIL);
         }
-        return MailSender.sendToGroup(to, cc, subject, body, attaches);
+        return result;
     }
 
     @Override
     public GroupResult sendBulk(Set<Addressee> to, String subject, String body, List<Attach> attaches) throws WebStateException {
-        return MailServiceExecutor.sendBulk(to, subject, body, attaches);
+        GroupResult result = MailServiceExecutor.sendBulk(to, subject, body, attaches);
+        if (result.getFailedCause() != null) {
+            throw new WebStateException(result.getFailedCause(), ExceptionType.SYSTEM);
+        }
+
+        if (!result.getFailed().isEmpty()) {
+            throw new WebStateException(result.toString(), ExceptionType.EMAIL);
+        }
+
+        return result;
     }
 }

@@ -6,7 +6,6 @@ import com.google.common.collect.Iterables;
 import com.google.common.io.Resources;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.event.Level;
-import ru.javaops.web.AuthUtil;
 import ru.javaops.web.WebStateException;
 import ru.javaops.web.WsClient;
 import ru.javaops.web.handler.SoapClientLoggingHandler;
@@ -16,14 +15,13 @@ import javax.xml.ws.soap.MTOMFeature;
 import java.util.List;
 import java.util.Set;
 
+import static ru.javaops.web.AuthUtil.PASSWORD;
+import static ru.javaops.web.AuthUtil.USER;
+
 @Slf4j
 public class MailWSClient {
     private static final WsClient<MailService> WS_CLIENT;
-    public static final String USER = "user";
-    public static final String PASSWORD = "password";
     private static final SoapClientLoggingHandler LOGGING_HANDLER = new SoapClientLoggingHandler(Level.DEBUG);
-
-    public static String AUTH_HEADER = AuthUtil.encodeBasicAuthHeader(USER, PASSWORD);
 
     static {
         WS_CLIENT = new WsClient<MailService>(Resources.getResource("wsdl/mailService.wsdl"),
@@ -41,8 +39,8 @@ public class MailWSClient {
             status = getPort().sendToGroup(to, cc, subject, body, attaches);
             log.info("Sent with status: " + status);
         } catch (Exception e) {
-            log.error("sendToGroup failed", e);
-            throw WsClient.getWebStateException(e);
+            log.error("sendToGroup failed " + e.toString(), e);
+            status = e.getMessage();
         }
         return status;
     }

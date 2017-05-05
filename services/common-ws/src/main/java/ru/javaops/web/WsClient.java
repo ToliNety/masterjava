@@ -15,15 +15,11 @@ import java.util.List;
 import java.util.Map;
 
 public class WsClient<T> {
-    private static Config HOSTS;
+    static final Config HOSTS = Configs.getConfig("hosts.conf", "hosts.mail");
 
     private final Class<T> serviceClass;
     private final Service service;
     private String endpointAddress;
-
-    static {
-        HOSTS = Configs.getConfig("hosts.conf", "hosts.mail");
-    }
 
     public WsClient(URL wsdlUrl, QName qname, Class<T> serviceClass) {
         this.serviceClass = serviceClass;

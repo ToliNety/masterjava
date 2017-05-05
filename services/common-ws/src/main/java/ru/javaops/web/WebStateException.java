@@ -10,7 +10,7 @@ import javax.xml.ws.WebFault;
 public class WebStateException extends Exception {
     private FaultInfo faultInfo;
 
-    public WebStateException(String message, FaultInfo faultInfo) {
+    public WebStateException(String message, ExceptionType type) {
         super(message);
         this.faultInfo = faultInfo;
     }

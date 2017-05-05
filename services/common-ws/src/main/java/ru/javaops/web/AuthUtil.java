@@ -10,6 +10,9 @@ import java.util.Map;
 @Slf4j
 public class AuthUtil {
     private static final String AUTHORIZATION = "Authorization";
+    public static final String USER = WsClient.HOSTS.getString("user");
+    public static final String PASSWORD = WsClient.HOSTS.getString("password");
+    public static final String AUTH_HEADER = encodeBasicAuthHeader(USER, PASSWORD);
 
     public static String encodeBasicAuthHeader(String name, String passw) {
         String authString = name + ":" + passw;

@@ -45,6 +45,7 @@ public class MailSender {
             //            https://yandex.ru/blog/company/66296
             email.setHeaders(ImmutableMap.of("List-Unsubscribe", "<mailto:masterjava@javaops.ru?subject=Unsubscribe&body=Unsubscribe>"));
             email.send();
+            log.info("Sent with state: " + state);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             state = e.getMessage();
@@ -55,7 +56,6 @@ public class MailSender {
             log.error("Mail history saving exception", e);
             throw new WebStateException(ExceptionType.DATA_BASE, e);
         }
-        log.info("Sent with state: " + state);
         return state;
     }
 
