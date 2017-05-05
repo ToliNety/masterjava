@@ -22,7 +22,7 @@ public class MailServiceClient {
         MailService mailService = service.getPort(MailService.class);
 
         ImmutableSet<Addressee> addressees = ImmutableSet.of(
-                new Addressee("Мастер Java <masterjava@javaops.ru>"));
+                new Addressee("test"));
 
         List<Attach> attaches = ImmutableList.of(
                 new Attach("version.html", new DataHandler(new File("config_templates/version.html").toURI().toURL())));

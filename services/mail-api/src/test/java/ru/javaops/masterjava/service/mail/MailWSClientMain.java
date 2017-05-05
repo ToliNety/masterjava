@@ -11,7 +11,7 @@ import java.io.File;
 public class MailWSClientMain {
     public static void main(String[] args) {
         ImmutableSet<Addressee> addressees = ImmutableSet.of(
-                new Addressee("Tolik <tolikswc@yandex.ru"));
+                new Addressee("test"));
 
         try {
             String state = MailWSClient.sendToGroup(addressees, ImmutableSet.of(), "Subject", "Body", ImmutableList.of(
