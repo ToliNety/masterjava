@@ -19,9 +19,8 @@ import java.util.Set;
 @Slf4j
 public class MailWSClient {
     private static final WsClient<MailService> WS_CLIENT;
-    public static final String USER = "user";
-    public static final String PASSWORD = "password";
-    public static final String AUTH_HEADER = AuthUtil.encodeBasicAuthHeader(USER, PASSWORD);
+    public static final String AUTH_HEADER = AuthUtil.encodeBasicAuthHeader(
+            getHostConfig().user, getHostConfig().password);
     private static final SoapLoggingHandlers.ClientHandler LOGGING_HANDLER = new SoapLoggingHandlers.ClientHandler(Level.DEBUG);
 
     static {
@@ -61,13 +60,15 @@ public class MailWSClient {
 
     private static MailService getPort() {
         MailService port = WS_CLIENT.getPort(new MTOMFeature(1024));
-        WsClient.setAuth(port, USER, PASSWORD);
-        WsClient.setHandler(port, LOGGING_HANDLER);
         return port;
     }
 
     public static Set<Addressee> split(String addressees) {
         Iterable<String> split = Splitter.on(',').trimResults().omitEmptyStrings().split(addressees);
         return ImmutableSet.copyOf(Iterables.transform(split, Addressee::new));
+    }
+
+    public static WsClient.HostConfig getHostConfig() {
+        return WS_CLIENT.getHostConfig();
     }
 }
