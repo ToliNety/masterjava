@@ -5,11 +5,8 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.io.Resources;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.event.Level;
-import ru.javaops.web.AuthUtil;
 import ru.javaops.web.WebStateException;
 import ru.javaops.web.WsClient;
-import ru.javaops.web.handler.SoapLoggingHandlers;
 
 import javax.xml.namespace.QName;
 import javax.xml.ws.soap.MTOMFeature;
@@ -19,16 +16,13 @@ import java.util.Set;
 @Slf4j
 public class MailWSClient {
     private static final WsClient<MailService> WS_CLIENT;
-    public static final String AUTH_HEADER = AuthUtil.encodeBasicAuthHeader(
-            getHostConfig().user, getHostConfig().password);
-    private static final SoapLoggingHandlers.ClientHandler LOGGING_HANDLER = new SoapLoggingHandlers.ClientHandler(Level.DEBUG);
 
     static {
         WS_CLIENT = new WsClient<MailService>(Resources.getResource("wsdl/mailService.wsdl"),
                 new QName("http://mail.javaops.ru/", "MailServiceImplService"),
                 MailService.class);
 
-        WS_CLIENT.init("endpoint", "/mail/mailService?wsdl");
+        WS_CLIENT.init("mail", "/mail/mailService?wsdl");
     }
 
 
@@ -59,8 +53,7 @@ public class MailWSClient {
     }
 
     private static MailService getPort() {
-        MailService port = WS_CLIENT.getPort(new MTOMFeature(1024));
-        return port;
+        return WS_CLIENT.getPort(new MTOMFeature(1024));
     }
 
     public static Set<Addressee> split(String addressees) {

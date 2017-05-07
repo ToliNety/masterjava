@@ -57,7 +57,7 @@ public class WsClient<T> {
     }
 
     static {
-        HOSTS = Configs.getConfig("hosts.conf", "hosts.mail");
+        HOSTS = Configs.getConfig("hosts.conf", "hosts");
     }
 
     public WsClient(URL wsdlUrl, QName qname, Class<T> serviceClass) {
