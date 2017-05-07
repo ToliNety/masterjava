@@ -6,6 +6,7 @@ import org.slf4j.event.Level;
 public class SoapServerLoggingHandler extends SoapLoggingHandler {
 
     public SoapServerLoggingHandler() {
+        //TODO Add logger level from hosts.conf
         super(Level.INFO);
     }
 
