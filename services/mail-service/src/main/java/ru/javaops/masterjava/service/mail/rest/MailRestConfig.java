@@ -1,5 +1,6 @@
 package ru.javaops.masterjava.service.mail.rest;
 
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
 import javax.ws.rs.ApplicationPath;
@@ -8,5 +9,6 @@ import javax.ws.rs.ApplicationPath;
 public class MailRestConfig extends ResourceConfig {
     public MailRestConfig() {
         packages("ru.javaops.masterjava.service.mail.rest");
+        register(MultiPartFeature.class);
     }
 }
