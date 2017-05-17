@@ -1,20 +1,26 @@
 package ru.javaops.masterjava.webapp;
 
 import lombok.extern.slf4j.Slf4j;
+import ru.javaops.masterjava.service.mail.Attach;
+import ru.javaops.masterjava.service.mail.MailDTO;
+import ru.javaops.masterjava.service.mail.util.Attachments;
 
 import javax.jms.*;
 import javax.naming.InitialContext;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 import java.io.IOException;
 import java.lang.IllegalStateException;
 
 @WebServlet("/sendJms")
 @Slf4j
+@MultipartConfig
 public class JmsSendServlet extends HttpServlet {
     private Connection connection;
     private Session session;
@@ -51,15 +57,26 @@ public class JmsSendServlet extends HttpServlet {
         String users = req.getParameter("users");
         String subject = req.getParameter("subject");
         String body = req.getParameter("body");
-        resp.getWriter().write(sendJms(users, subject, body));
+        Attach attache;
+        Part filePart = req.getPart("attach");
+        if (filePart == null) {
+            attache = null;
+        } else {
+            attache = Attachments.getAttach(filePart.getSubmittedFileName(), filePart.getInputStream());
+        }
+
+        resp.getWriter().write(sendJms(new MailDTO(users, subject, body,
+                attache == null ? "" : attache.getName(),
+                Attachments.getBytesFromAttach(attache))));
     }
 
-    private synchronized String sendJms(String users, String subject, String body) {
+    private synchronized String sendJms(MailDTO mail) {
         String msg;
         try {
-            TextMessage testMessage = session.createTextMessage();
-            testMessage.setText(subject);
-            producer.send(testMessage);
+
+            ObjectMessage objMessage = session.createObjectMessage();
+            objMessage.setObject(mail);
+            producer.send(objMessage);
             msg = "Successfully sent message.";
             log.info(msg);
         } catch (Exception e) {

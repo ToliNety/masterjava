@@ -1,6 +1,7 @@
 package ru.javaops.masterjava.service.mail.util;
 
 import lombok.AllArgsConstructor;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.CloseShieldInputStream;
 import ru.javaops.masterjava.service.mail.Attach;
 
@@ -15,6 +16,19 @@ public class Attachments {
         return new Attach(name, new DataHandler(new InputStreamDataSource(inputStream)));
     }
 
+    public static byte[] getBytesFromAttach(Attach attach) {
+        if (attach != null) {
+            try {
+                InputStream is = attach.getDataHandler().getInputStream();
+                return IOUtils.toByteArray(is);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return new byte[0];
+    }
+
+
     //    http://stackoverflow.com/questions/2830561/how-to-convert-an-inputstream-to-a-datahandler
     //    http://stackoverflow.com/a/5924019/548473
 
@@ -28,7 +42,7 @@ public class Attachments {
         }
     }
 
-    public interface ProxyDataSource extends DataSource{
+    public interface ProxyDataSource extends DataSource {
         @Override
         default OutputStream getOutputStream() throws IOException {
             throw new UnsupportedOperationException("Not implemented");
