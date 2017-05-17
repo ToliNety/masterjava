@@ -13,8 +13,11 @@ import ru.javaops.masterjava.service.mail.MailWSClient;
 import ru.javaops.masterjava.service.mail.util.Attachments;
 import ru.javaops.web.WebStateException;
 
+import javax.activation.DataHandler;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 @Path("/")
@@ -43,7 +46,8 @@ public class MailRS {
             attaches = ImmutableList.of();
         } else {
             BodyPartEntity bodyPartEntity = (BodyPartEntity) fileBody.getEntity();
-            attaches = ImmutableList.of(Attachments.getAttach(fileName, bodyPartEntity.getInputStream()));
+            attaches = ImmutableList.of(new Attach(fileName,
+                    new DataHandler((Attachments.ProxyDataSource) bodyPartEntity::getInputStream)));
         }
 
         return MailServiceExecutor.sendBulk(MailWSClient.split(users), subject, body, attaches);
